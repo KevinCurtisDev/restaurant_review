@@ -1,3 +1,15 @@
+//Get restaurant list container from the dom
+const restaurantsList = document.querySelector("#restaurant-list");
+//Get add rating button from the dom
+const addRating = document.getElementById("add-restaurant");
+
+//use fetch api to retrieve restaurant data
+fetch("/data/data.json")
+    .then(function (response) { return response.json(); })
+    .then(function (data) {
+        //check that we're getting the correct response
+        console.log(data.reviews[0].restaurantName);
+
 //Get user's current location
 navigator.geolocation.getCurrentPosition(function (location) {
     //set variable for user's coordinates
@@ -14,18 +26,13 @@ navigator.geolocation.getCurrentPosition(function (location) {
 
     L.marker(latlng).addTo(mymap)
     //add a popupto the map marker
-        .bindPopup(`${restaurantReviews.reviews[0].restaurantName} <br> ${restaurantReviews.reviews[0].address}`);
+        .bindPopup(`${data.reviews[0].restaurantName} <br> ${data.reviews[0].address}`);
 
     mymap.addEventListener("click", function (e) {
         var mp = new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
         alert(mp.getLatLng());
     });
 });
-
-//Get restaurant list container from the dom
-const restaurantsList = document.querySelector("#restaurant-list");
-//Get add rating button from the dom
-const addRating = document.getElementById("add-restaurant");
 
 
 addRating.addEventListener("click", (e) => {
@@ -39,16 +46,10 @@ addRating.addEventListener("click", (e) => {
     newReview["stars"] = addRating;
     newReview["comment"] = addComment;
 
-    reviews[0].ratings.push(newReview);
+    data.reviews[0].ratings.push(newReview);
     populateRestaurantHtml();
 });
 
-//use fetch api to retrieve restaurant data
-fetch("/data/data.json")
-    .then(function (response) { return response.json(); })
-    .then(function (data) {
-        //check that we're getting the correct response
-        console.log(data.reviews[0].restaurantName);
      
 //function that creates and adds restaurant data to the dom
 const populateRestaurantHtml = () => {
@@ -84,4 +85,27 @@ populateRestaurantHtml();
 
 
 
+/*
+*
+Access restaurant data from the zomato API
+*
+*/
 
+//set headers for zomato API
+const myHeaders = new Headers();
+
+myHeaders.append('Accept', 'application/json');
+myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
+myHeaders.append('user-key', '748ea5db9e15aad3e697838a729ec4ca');
+
+//fetch data from zomato api
+fetch('https://developers.zomato.com/api/v2.1/geocode?lat=53.3498&lon=-6.2603', {
+        async: true,
+        crossDomain: true,
+        method: 'GET',
+        headers: myHeaders,
+    })
+        .then(function (response) { return response.json(); })
+        .then(function (zomatoData) {
+            console.log(zomatoData.location.city_name)
+});
