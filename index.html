@@ -4,16 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin="" />
     <link rel="stylesheet" href="assests/styles/styles.css">
     <title>restaurant review</title>
 </head>
 <body>
     <div class="container">
-        <div class="map"></div>
+        <div class="map" id="leafletMap"></div>
         <div class="restaurant-list">
             <ul id="restaurant-list"></ul>
         </div>
     </div>
+
+    <form>
+        <label for="restaurant-comment">Your review</label><br>
+        <textarea name="restaurant-comment" id="restaurant-comment" cols="30" rows="10"></textarea><br>
+        <label for="restaurant-rating">Rating</label>
+        <select name="restaurant-rating" id="restaurant-rating">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select><br>
+        <button id="add-restaurant">ADD</button>
+    </form>
+    
+    <script type="text/javascript" src="data.json"></script>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+        integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+        crossorigin=""></script>
     <script src="js/app.js"></script>
 </body>
 </html>
