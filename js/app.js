@@ -2,6 +2,12 @@
 const restaurantsList = document.querySelector("#restaurant-list");
 //Get add rating button from the dom
 const addRating = document.getElementById("add-restaurant");
+//Get modal from the dom
+const modal = document.getElementById("modal");
+
+//filter lower and higher values
+let lower = 1;
+let higher = 5;
 
 //Get user's current location
 navigator.geolocation.getCurrentPosition(function (location) {
@@ -35,42 +41,62 @@ navigator.geolocation.getCurrentPosition(function (location) {
 
             let restaurantInfoList = [];
 
-            for (let i = 0; i < zomatoData.nearby_restaurants.length; i++) {
-                let restaurantDetails = document.createElement("li");
-                restaurantDetails.classList.add("review");
+            //Apply filter before rebuilding the restaurant list
+            document.getElementById("filter").addEventListener("click", (e) => {
+                e.target.preventDefault;
 
-                let zomatoImg = document.createElement("img");
-                let source = zomatoData.nearby_restaurants[i].restaurant.featured_image;
-                console.log(source);
-                zomatoImg.setAttribute("src", source);
+                restaurantsList.innerHTML = "";
 
-                let zomatohtml = document.createElement("p");
-                zomatohtml.innerHTML = `Restaurant name: ${zomatoData.nearby_restaurants[i].restaurant.name}`;
-                zomatohtml.id = zomatoData.nearby_restaurants[i].restaurant.id;
-    
-                let zomatoAddress = document.createElement("p");
-                zomatoAddress.innerHTML = `Address: ${zomatoData.nearby_restaurants[i].restaurant.location.address}`;
+                lower = document.getElementById("lowerRating").value;
+                higher = document.getElementById("higherRating").value; 
 
-                let zomatoRating = document.createElement("p");
-                zomatoRating.innerHTML = `Rating: ${zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating}, ${zomatoData.nearby_restaurants[i].restaurant.user_rating.rating_text}`;
+                buildList();
+            }); 
+
+            const buildList = ()=> {
+                for (let i = 0; i < zomatoData.nearby_restaurants.length; i++) {
+                    if (zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating >= `${lower}.0` &&
+                        zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating <= `${higher}.0`
+                    ) {
+                        let restaurantDetails = document.createElement("li");
+                        restaurantDetails.classList.add("review");
+
+                        let zomatoImg = document.createElement("img");
+                        let source = zomatoData.nearby_restaurants[i].restaurant.featured_image;
+                        console.log(source);
+                        zomatoImg.setAttribute("src", source);
+
+                        let zomatohtml = document.createElement("p");
+                        zomatohtml.innerHTML = `Restaurant name: ${zomatoData.nearby_restaurants[i].restaurant.name}`;
+                        zomatohtml.id = zomatoData.nearby_restaurants[i].restaurant.id;
+
+                        let zomatoAddress = document.createElement("p");
+                        zomatoAddress.innerHTML = `Address: ${zomatoData.nearby_restaurants[i].restaurant.location.address}`;
+
+                        let zomatoRating = document.createElement("p");
+                        zomatoRating.innerHTML = `Rating: ${zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating}, ${zomatoData.nearby_restaurants[i].restaurant.user_rating.rating_text}`;
 
 
-                restaurantsList.append(restaurantDetails);
-                restaurantDetails.append(zomatohtml);
-                zomatohtml.append(zomatoAddress);
-                zomatoAddress.append(zomatoRating);
-                zomatoRating.append(zomatoImg);
+                        restaurantsList.append(restaurantDetails);
+                        restaurantDetails.append(zomatoImg);
+                        restaurantDetails.append(zomatohtml);
+                        zomatohtml.append(zomatoAddress);
+                        zomatoAddress.append(zomatoRating);
 
-                let individualRestaurant = [
-                                            zomatoData.nearby_restaurants[i].restaurant.name,
-                                            zomatoData.nearby_restaurants[i].restaurant.location.latitude, 
-                                            zomatoData.nearby_restaurants[i].restaurant.location.longitude,
-                                            zomatoData.nearby_restaurants[i].restaurant.id
-                                        ];
-                restaurantInfoList.push(individualRestaurant);
-                
+                        let individualRestaurant = [
+                            zomatoData.nearby_restaurants[i].restaurant.name,
+                            zomatoData.nearby_restaurants[i].restaurant.location.latitude,
+                            zomatoData.nearby_restaurants[i].restaurant.location.longitude,
+                            zomatoData.nearby_restaurants[i].restaurant.id
+                        ];
+                        restaurantInfoList.push(individualRestaurant);
+                    } 
+                }
             }
-
+                
+            buildList();
+            
+            
             console.log(restaurantInfoList);
 
     /************************************* BUILD MAP AND ADD MARKERS *********************************/
@@ -83,7 +109,9 @@ navigator.geolocation.getCurrentPosition(function (location) {
                 accessToken: 'pk.eyJ1Ijoia2V2aW4xOTgxIiwiYSI6ImNqdG16emNoMDJnaTAzeXJyNjNyaXVmYWkifQ.h4o3OiiEqYEzarChFx7-8Q'
             }).addTo(mymap);
 
-            L.marker(latlng).addTo(mymap);
+            L.marker(latlng).addTo(mymap).on('click', (e) => {
+                alert(e.latlng);
+            });
 
             //Add new marker to map
             mymap.on('click', (e) => {
@@ -91,6 +119,15 @@ navigator.geolocation.getCurrentPosition(function (location) {
                  L.marker(e.latlng).addTo(mymap);
                  
                  //TODO: trigger modal and prompt for location information
+                 modal.style.display = "block";
+
+                 let newRestaurant = {
+                     restaurantName: 1,
+                     restaurantReview: 2,
+                     restaurantRating: 3,
+                     reviewerName: 4,
+                     restaurantImgUrl: "abcd"
+                 }
 
                  //TODO: bind modal info to marker and save in local storage
 		 	});
@@ -124,3 +161,7 @@ navigator.geolocation.getCurrentPosition(function (location) {
     /*************************************************************************************/
 });
 
+
+const validateForm = () => {
+    return false;
+};

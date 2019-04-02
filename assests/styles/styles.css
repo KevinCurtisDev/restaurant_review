@@ -5,6 +5,7 @@
   margin: 0;
 }
 
+
 header {
   width: 100%;
   background: #330000;
@@ -27,6 +28,7 @@ h1 {
   height: 100vh;
   margin: 0 auto;
   display: flex;
+  z-index: 1;
 }
 
 .map {
@@ -56,4 +58,12 @@ ul {
 img {
   width: 100%;
   height: auto;
+}
+
+.modal {
+  position: absolute;
+  width: 200px;
+  max-width: 200px;
+  margin-left: calc(50% - 100px);
+  display: none;
 }
