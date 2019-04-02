@@ -1,5 +1,24 @@
 * {
   box-sizing: border-box;
+  font-family: "sans-serif";
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  width: 100%;
+  background: #330000;
+  color: white;
+  padding: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 2rem;
+  background: -webkit-linear-gradient(#ff8533, #290a0a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .container {
