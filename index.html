@@ -14,13 +14,30 @@
     <header>
         <h1>Flaming Delicious Restaurant Reviews</h1>
     </header>
+    <div class="modal" id="modal">
+        <form onsubmit="return validateForm()" id="newRestaurantForm">
+            <input type="text" placeholder="Your name" id="users-name" required>
+            <input type="text" placeholder="Restaurant name" id="restaurants-name" required>
+            <textarea id="users-review" placeholder="Your review"
+                required></textarea><br>
+            <label for="restaurant-rating">Your rating</label>
+            <select id="restaurant-rating">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select><br>
+            <input id="add-restaurant" type="submit" class="button" value="ADD">
+        </form>
+    </div>
     <div class="container">
         <div class="map" id="leafletMap"></div>
         <div class="restaurant-list">
             <p>Filter Restarants</p>
             <form onsubmit="return validateForm()">
                 <label for="lowerRating">Lowest Rating</label>
-                <select name="lowerRating" id="lowerRating">
+                <select id="lowerRating">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -28,35 +45,19 @@
                 </select>
 
                 <label for="higherRating">Highest Rating</label>
-                <select name="higherRating" id="higherRating">
+                <select id="higherRating">
                     <option value="5">5</option>
                     <option value="4">4</option>
                     <option value="3">3</option>
                     <option value="4">2</option>
                 </select>
-                <input type="submit" value="search" id="filter">
+                <input id="filter" type="submit" class="button" value="FILTER">
             </form>
             <ul id="restaurant-list"></ul>
         </div>
     </div>
-
-    <div class="modal" id="modal">
-        <form>
-            <label for="restaurant-comment">Your review</label><br>
-            <textarea name="restaurant-comment" id="review" cols="30" rows="10"></textarea><br>
-            <label for="restaurant-rating">Rating</label>
-            <select name="restaurant-rating" id="restaurant-rating">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-            </select><br>
-            <button id="add-restaurant">ADD</button>
-        </form>
-    </div>
     
-    <script type="text/javascript" src="data.json"></script>
+    <!-- <script type="text/javascript" src="data.json"></script> -->
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>

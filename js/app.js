@@ -14,7 +14,6 @@ navigator.geolocation.getCurrentPosition(function (location) {
 
     //set variable for user's coordinates
     var latlng = new L.LatLng(location.coords.latitude, location.coords.longitude);
-    console.log(latlng);
 
     /*
     Access restaurant data from the zomato API
@@ -63,7 +62,6 @@ navigator.geolocation.getCurrentPosition(function (location) {
 
                         let zomatoImg = document.createElement("img");
                         let source = zomatoData.nearby_restaurants[i].restaurant.featured_image;
-                        console.log(source);
                         zomatoImg.setAttribute("src", source);
 
                         let zomatohtml = document.createElement("p");
@@ -99,7 +97,7 @@ navigator.geolocation.getCurrentPosition(function (location) {
             
             console.log(restaurantInfoList);
 
-    /************************************* BUILD MAP AND ADD MARKERS *********************************/
+    /************************************* BUILD THE MAP AND ADD MARKERS *********************************/
             //set leafletJS map view to user's current position
             let mymap = L.map('leafletMap').setView(latlng, 13)
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
@@ -109,25 +107,30 @@ navigator.geolocation.getCurrentPosition(function (location) {
                 accessToken: 'pk.eyJ1Ijoia2V2aW4xOTgxIiwiYSI6ImNqdG16emNoMDJnaTAzeXJyNjNyaXVmYWkifQ.h4o3OiiEqYEzarChFx7-8Q'
             }).addTo(mymap);
 
-            L.marker(latlng).addTo(mymap).on('click', (e) => {
-                alert(e.latlng);
+            //Create map marker for user's current location
+            var greenIcon = new L.Icon({
+                iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
             });
+
+            //Add user's location marker to map
+            L.marker([location.coords.latitude, location.coords.longitude], { icon: greenIcon })
+            //bind a pop up to user's marker that displays a message when clicked
+            .bindPopup("hello map")
+            .addTo(mymap);
 
             //Add new marker to map
             mymap.on('click', (e) => {
-		 		var coord = e.latlng.toString().split(',');
-                 L.marker(e.latlng).addTo(mymap);
+                 L.marker(e.latlng)
+                 .bindPopup("new map marker")
+                 .addTo(mymap);
                  
                  //TODO: trigger modal and prompt for location information
                  modal.style.display = "block";
-
-                 let newRestaurant = {
-                     restaurantName: 1,
-                     restaurantReview: 2,
-                     restaurantRating: 3,
-                     reviewerName: 4,
-                     restaurantImgUrl: "abcd"
-                 }
 
                  //TODO: bind modal info to marker and save in local storage
 		 	});
@@ -162,6 +165,42 @@ navigator.geolocation.getCurrentPosition(function (location) {
 });
 
 
+let newRestaurant = {
+    restaurantName: "",
+    newReview: {
+        restaurantReview: "",
+        restaurantRating: "",
+        reviewerName: "",
+    }
+}
+
+let newRestaurants = [];
+
+//Store added estaurant details in session storage
+sessionStorage.setItem("newReasaurants", newRestaurants);
+
+document.getElementById("add-restaurant").addEventListener("click", () => {
+    let user = document.getElementById("users-name").value;
+    let restaurant = document.getElementById("restaurants-name").value;
+    let review = document.getElementById("users-review").value;
+    let rating = document.getElementById("restaurant-rating").value;
+
+    newRestaurant.restaurantName = restaurant;
+
+    newRestaurant.newReview.restaurantReview = review;
+    newRestaurant.newReview.restaurantRating = rating;
+    newRestaurant.newReview.reviewerName = user;
+    
+    //hide modal
+    modal.style.display = "none";
+    
+    //reset the form values after submitting
+    document.getElementById("newRestaurantForm").reset();
+});
+
+
+
 const validateForm = () => {
     return false;
 };
+
