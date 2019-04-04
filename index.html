@@ -31,6 +31,10 @@
             <input id="add-restaurant" type="submit" class="button" value="ADD">
         </form>
     </div>
+    <form onsubmit="return validateForm()" class="search-form" id="search-form">
+        <input type="text" placeholder="Search location" id="search-field">
+        <input id="search-btn" type="submit" class="button" value="SEARCH">
+    </form>
     <div class="container">
         <div class="map" id="leafletMap"></div>
         <div class="restaurant-list">
