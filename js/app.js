@@ -4,9 +4,13 @@ const restaurantsList = document.querySelector("#restaurant-list");
 const addRating = document.getElementById("add-restaurant");
 //Get modal from the dom
 const modal = document.getElementById("modal");
+const modalContainer = document.getElementById("modal-container");
 
 const reviewModal = document.getElementById("reviewModal");
 const reviewList = document.getElementById("userReviews");
+const reviewModalContainer = document.getElementById("reviewModal-container");
+const closeModal = document.getElementById("close-modal");
+
 
 //filter lower and higher values
 let lower = 0;
@@ -79,19 +83,8 @@ document.getElementById("search-btn").addEventListener("click", () => {
 
 ////////////////////////////////////////////////////////////////////
 
-let newRestaurant = {
-    restaurantName: "",
-    newReview: {
-        restaurantReview: "",
-        restaurantRating: "",
-        reviewerName: "",
-    }
-}
+let newRestaurant = [];
 
-let newRestaurants = [];
-
-//Store added estaurant details in session storage
-sessionStorage.setItem("newReasaurants", newRestaurants);
 
 document.getElementById("add-restaurant").addEventListener("click", () => {
     let user = document.getElementById("users-name").value;
@@ -99,14 +92,20 @@ document.getElementById("add-restaurant").addEventListener("click", () => {
     let review = document.getElementById("users-review").value;
     let rating = document.getElementById("restaurant-rating").value;
 
-    newRestaurant.restaurantName = restaurant;
+    newRestaurant.push(restaurant);
 
-    newRestaurant.newReview.restaurantReview = review;
-    newRestaurant.newReview.restaurantRating = rating;
-    newRestaurant.newReview.reviewerName = user;
+    newRestaurant.push(review);
+    newRestaurant.push(rating);
+    newRestaurant.push(user);
 
     //hide modal
     modal.style.display = "none";
+    modalContainer.style.display = "none";
+    modalContainer.style.opacity = "0";
+
+    restaurantInfoList.push(newRestaurant);
+    //buildList(restaurantInfoList);
+    console.log(restaurantInfoList)
 
     //reset the form values after submitting
     document.getElementById("newRestaurantForm").reset();
@@ -187,7 +186,7 @@ const buildMap = (latlng, latCoord, longCoord) => {
     //markers.clearLayers();
 
     //Create map marker for user's current location
-    var greenIcon = new L.Icon({
+    var redIcon = new L.Icon({
         iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
         iconSize: [25, 41],
@@ -197,25 +196,26 @@ const buildMap = (latlng, latCoord, longCoord) => {
     });
 
     //Add user's location marker to map
-    me = L.marker([latCoord, longCoord], { icon: greenIcon })
+    me = L.marker([latCoord, longCoord], { icon: redIcon })
         //bind a pop up to user's marker that displays a message when clicked
-        .bindPopup("hello map")
+        .bindPopup("You are here!")
         .addTo(mymap);
 
 
     //Add new marker to map
-    mymap.on('click', (e) => {
-        L.marker(e.latlng)
+    mymap.on("contextmenu", (e) => {
+        marker = new L.marker(e.latlng)
             .bindPopup("marker")
             .addTo(mymap);
 
-            
+        marker.on("click", () => {
+            reviewModal.style.display = "block";
+        });
 
-
-        //TODO: trigger modal and prompt for location information
+        modalContainer.style.display = "block";
+        modalContainer.style.opacity = "1";
         modal.style.display = "block";
 
-        //TODO: bind modal info to marker and save in local storage
     });
 
     
@@ -286,7 +286,8 @@ const restaurantMarkers = (restaurantInfoList) => {
             //TODO: add reviews to restaurant listing
             /*************************************************************************************/
 
-
+            reviewModalContainer.style.display = "block";
+            reviewModalContainer.style.opacity = "1";
             reviewModal.style.display = "block";
             
         });
@@ -335,7 +336,11 @@ const buildList = (zomatoData) => {
 
 
 
-
+closeModal.addEventListener("click", () => {
+    reviewModalContainer.style.display = "none";
+    reviewModalContainer.style.opacity = "0";
+    reviewModal.style.display = "none"; 
+});
 
 //mymap.removeLayer();
 
