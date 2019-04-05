@@ -14,6 +14,15 @@
     <header>
         <h1>Flaming Delicious Restaurant Reviews</h1>
     </header>
+    <div class="reviewModal" id="reviewModal">
+        <div class="modal__content">
+            <a href="#hero" class="close-modal">&times;</a>
+            
+            <ul id="userReviews">
+
+            </ul>
+        </div>
+    </div>
     <div class="modal" id="modal">
         <form onsubmit="return validateForm()" id="newRestaurantForm">
             <input type="text" placeholder="Your name" id="users-name" required>
@@ -42,6 +51,7 @@
             <form onsubmit="return validateForm()">
                 <label for="lowerRating">Lowest Rating</label>
                 <select id="lowerRating">
+                    <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -54,6 +64,7 @@
                     <option value="4">4</option>
                     <option value="3">3</option>
                     <option value="4">2</option>
+                    <option value="4">1</option>
                 </select>
                 <input id="filter" type="submit" class="button" value="FILTER">
             </form>

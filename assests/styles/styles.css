@@ -50,9 +50,10 @@ h1 {
 }
 
 .review {
-  background: #DCDCDC;
+  background: rgba(247, 242, 242, 0.76);
   padding: 10px;
   margin-top: 10px;
+  border-left: 10px #422020 solid; 
 }
 
 ul {
@@ -66,17 +67,35 @@ img {
 }
 
 .modal {
-  position: fixed;
+  position: absolute;
   width: 400px;
   max-width: 400px;
-  margin-top: 100px;
-  margin-left: calc(50% - 200px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: #fff;
   padding: 10px;
   box-shadow: 2px 2px 2px black;
   border-radius: 5px;
   display: none;
+}
+
+.reviewModal{
+  position: absolute;
+  width: 600px;
+  height: 400px;
+  max-width: 90%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 2px 2px 2px black;
+  border-radius: 5px;
+  display: none;
+  overflow-y: scroll;
 }
 
 .button {

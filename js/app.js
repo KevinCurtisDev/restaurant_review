@@ -5,11 +5,14 @@ const addRating = document.getElementById("add-restaurant");
 //Get modal from the dom
 const modal = document.getElementById("modal");
 
+const reviewModal = document.getElementById("reviewModal");
+const reviewList = document.getElementById("userReviews");
+
 //filter lower and higher values
-let lower = 1;
+let lower = 0;
 let higher = 5;
 
-let mymap = L.map('leafletMap')
+let mymap = L.map('leafletMap');
 
 let restaurantInfoList = [];
 
@@ -37,29 +40,13 @@ navigator.geolocation.getCurrentPosition(function (location) {
     Access restaurant data from the zomato API
     */
     getRestaurants(latlng, latCoord, longCoord);
-    buildMap(latlng, latCoord, longCoord);
-    
-    /************************* GET USER REVIEWS OF RESTAURANTS *****************************/
-    let restaurantID = 16774318;
-    //fetch data from zomato api
-    fetch(`https://developers.zomato.com/api/v2.1/reviews?res_id=${restaurantID}&start=1&count=5`, {
-        async: true,
-        crossDomain: true,
-        method: 'GET',
-        headers: myHeaders,
-    })
-        .then(function (response) { return response.json(); })
-        .then(function (reviewsData) {
-            console.log(reviewsData.user_reviews[0].review.rating_text);
-        });
-
-        //TODO: add reviews to restaurant listing
-    /*************************************************************************************/
+    buildMap(latlng, latCoord, longCoord);    
 });
 
 
 //search for restaurants in specific geographical location
 document.getElementById("search-btn").addEventListener("click", () => {
+    
     let location = document.getElementById("search-field").value
     
     let url = "http://open.mapquestapi.com/geocoding/v1/address?key=dc009bsV74eyrcwA6HtOEGXWDIDLKABg&location="+location;
@@ -162,8 +149,10 @@ const getRestaurants = (latlng, latcoord, longcoord) => {
         });
 }
 
+
 const restaurantList = (zomatoData) => {
     //clear previous list
+    
     restaurantInfoList = [];
     for (let i = 0; i < zomatoData.nearby_restaurants.length; i++) {
         let individualRestaurant = [
@@ -173,6 +162,7 @@ const restaurantList = (zomatoData) => {
             zomatoData.nearby_restaurants[i].restaurant.id,
             zomatoData.nearby_restaurants[i].restaurant.featured_image,
             zomatoData.nearby_restaurants[i].restaurant.location.address,
+            zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating,
             []
         ];
         restaurantInfoList.push(individualRestaurant);
@@ -182,6 +172,7 @@ const restaurantList = (zomatoData) => {
 }
 
 const buildMap = (latlng, latCoord, longCoord) => {
+    
     mymap.setView(latlng, 13)
     // BUILD THE MAP AND ADD MARKERS 
     //set leafletJS map view to user's current position
@@ -191,7 +182,9 @@ const buildMap = (latlng, latCoord, longCoord) => {
         id: 'mapbox.streets',
         accessToken: 'pk.eyJ1Ijoia2V2aW4xOTgxIiwiYSI6ImNqdG16emNoMDJnaTAzeXJyNjNyaXVmYWkifQ.h4o3OiiEqYEzarChFx7-8Q'
     }).addTo(mymap);
-
+    
+    //TODO: clear previously added pins
+    //markers.clearLayers();
 
     //Create map marker for user's current location
     var greenIcon = new L.Icon({
@@ -204,16 +197,20 @@ const buildMap = (latlng, latCoord, longCoord) => {
     });
 
     //Add user's location marker to map
-    L.marker([latCoord, longCoord], { icon: greenIcon })
+    me = L.marker([latCoord, longCoord], { icon: greenIcon })
         //bind a pop up to user's marker that displays a message when clicked
         .bindPopup("hello map")
         .addTo(mymap);
 
+
     //Add new marker to map
     mymap.on('click', (e) => {
         L.marker(e.latlng)
-            .bindPopup("new map marker")
+            .bindPopup("marker")
             .addTo(mymap);
+
+            
+
 
         //TODO: trigger modal and prompt for location information
         modal.style.display = "block";
@@ -228,14 +225,75 @@ const buildMap = (latlng, latCoord, longCoord) => {
 const restaurantMarkers = (restaurantInfoList) => {
     //create markers based on the coordinates of listed close by restaurants
     for (var i = 0; i < restaurantInfoList.length; i++) {
+        let id = i;
         marker = new L.marker([restaurantInfoList[i][1], restaurantInfoList[i][2]])
             //add a popup to the map marker
             .bindPopup(restaurantInfoList[i][0])
             //add marker to map
             .addTo(mymap);
-    }
-}
 
+        
+
+        marker.on("click", () => {
+            reviewList.innerHTML = "";
+            const restaurntName = document.createElement("h2");
+            restaurntName.innerHTML = restaurantInfoList[id][0];
+
+            //show reviews model
+            /************************* GET USER REVIEWS OF RESTAURANTS *****************************/
+            let restaurantID = restaurantInfoList[id][3];
+            //fetch data from zomato api
+            fetch(`https://developers.zomato.com/api/v2.1/reviews?res_id=${restaurantID}&start=1&count=5`, {
+                async: true,
+                crossDomain: true,
+                method: 'GET',
+                headers: myHeaders,
+            })
+                .then(function (response) { return response.json(); })
+                .then(function (reviewsData) {
+
+                    
+                    for (let i = 0; i <= reviewsData.user_reviews.length; i++){
+                        if (reviewsData.user_reviews.length < 1) {
+                            let listItem = document.createElement("li");
+                            listItem.innerHTML = "Sorry, no reviews yet!";
+                            reviewList.prepend(restaurntName);
+                        }else {
+                            let listItem = document.createElement("li");
+                            listItem.classList.add("review");
+
+                            let reviewText = document.createElement("p");
+                            reviewText.innerHTML = reviewsData.user_reviews[i].review.review_text;
+
+                            let reviewRating = document.createElement("p");
+                            reviewRating.innerHTML = `User Rating: ${reviewsData.user_reviews[i].review.rating}/5`;
+
+                            let reviewUserName = document.createElement("p");
+                            reviewUserName.innerHTML = reviewsData.user_reviews[i].review.user.name;
+
+                            reviewList.prepend(restaurntName);
+                            reviewList.append(listItem);
+
+                            listItem.append(reviewUserName);
+                            listItem.append(reviewRating);
+                            listItem.append(reviewText);
+                        }
+                         
+                    }
+
+                });
+
+            //TODO: add reviews to restaurant listing
+            /*************************************************************************************/
+
+
+            reviewModal.style.display = "block";
+            
+        });
+        
+    }
+
+}
 
 
 
@@ -243,7 +301,7 @@ const buildList = (zomatoData) => {
     //clear previous list before building dom
     restaurantsList.innerHTML = "";
     for (let i = 0; i < zomatoData.nearby_restaurants.length; i++) {
-        if (zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating >= `${lower}.0` &&
+        if (zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating >= `${lower}` &&
             zomatoData.nearby_restaurants[i].restaurant.user_rating.aggregate_rating <= `${higher}.0`
         ) {
             let restaurantDetails = document.createElement("li");
@@ -279,6 +337,6 @@ const buildList = (zomatoData) => {
 
 
 
-
+//mymap.removeLayer();
 
 
