@@ -51,24 +51,15 @@
     <div class="container">
         <div class="map" id="leafletMap"></div>
         <div class="restaurant-list">
-            <p>Filter Restarants</p>
             <form onsubmit="return validateForm()">
-                <label for="lowerRating">Lowest Rating</label>
+                <label for="lowerRating">Minimum Rating</label>
                 <select id="lowerRating">
                     <option value="0">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
-                </select>
-
-                <label for="higherRating">Highest Rating</label>
-                <select id="higherRating">
                     <option value="5">5</option>
-                    <option value="4">4</option>
-                    <option value="3">3</option>
-                    <option value="4">2</option>
-                    <option value="4">1</option>
                 </select>
                 <input id="filter" type="submit" class="button" value="FILTER">
             </form>
