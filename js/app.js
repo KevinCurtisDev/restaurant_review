@@ -167,8 +167,6 @@ const buildMap = (latlng, latCoord, longCoord) => {
         accessToken: 'pk.eyJ1Ijoia2V2aW4xOTgxIiwiYSI6ImNqdG16emNoMDJnaTAzeXJyNjNyaXVmYWkifQ.h4o3OiiEqYEzarChFx7-8Q'
     }).addTo(mymap);
     
-    //TODO: clear previously added pins
-    //markers.clearLayers();
 
     //Create map marker for user's current location
     var redIcon = new L.Icon({
@@ -186,6 +184,14 @@ const buildMap = (latlng, latCoord, longCoord) => {
         .bindPopup("You are here!")
         .addTo(mymap);
 
+}
+
+//Constructor function for new restaurant
+function NewRestaurant(restaurantName, userName, userReview, userRating) {
+    this.restaurantName = restaurantName;
+    this.userName = userName;
+    this.userReview = userReview;
+    this.userRating = userRating;
 }
 
 /*
@@ -280,7 +286,7 @@ const restaurantMarkers = (restaurantInfoList) => {
             //Get user reviews for specific restaurant
             let restaurantID = restaurantInfoList[id][3];
             //fetch review data from zomato api
-            fetch(`https://developers.zomato.com/api/v2.1/reviews?res_id=${restaurantID}&start=1&count=5`, {
+            fetch(`https://developers.zomato.com/api/v2.1/reviews?res_id=${restaurantID}&start=1&count=8`, {
                 async: true,
                 crossDomain: true,
                 method: 'GET',
