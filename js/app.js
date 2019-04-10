@@ -186,64 +186,79 @@ const buildMap = (latlng, latCoord, longCoord) => {
 
 }
 
-//Constructor function for new restaurant
-function NewRestaurant(restaurantName, userName, userReview, userRating) {
-    this.restaurantName = restaurantName;
-    this.userName = userName;
-    this.userReview = userReview;
-    this.userRating = userRating;
-}
 
 /*
 ************************************ Add new marker to map *********************************
 */
 
+
+let newRestauratMarkers = [];
+//Right click on map to add a new restaurant
 mymap.on("contextmenu", (e) => {
 
-    document.getElementById("add-restaurant").addEventListener("click", () => {
+    newRestauratMarkers.push(e.latlng)
 
-        let user = document.getElementById("users-name").value;
-        let restaurant = document.getElementById("restaurants-name").value;
-        let review = document.getElementById("users-review").value;
-        let rating = document.getElementById("restaurant-rating").value;
-
-        //hide modal
-        modal.style.display = "none";
-        modalContainer.style.display = "none";
-        modalContainer.style.opacity = "0";
-
-        newRestaurants.push(newRestaurant);
-        //buildList(restaurantInfoList);
-        console.log(newRestaurants)
-
-        //reset the form values after submitting
-        document.getElementById("newRestaurantForm").reset();
-    
-    });
-
-    marker = new L.marker(e.latlng, {name: name})
-        .bindPopup("Damn you leafletJS, You won this round!")
+    marker = new L.marker(e.latlng)
+        .bindPopup("Your new restaurant")
         .addTo(mymap);
-
-    
-    //restaurant.coordintes = e.latlng;
-    //newRestaurants.push(restaurant);
+        console.log(e.latlng);
 
     //TODO: access marker latlng  
-    marker.on("click", (e) => {
-        console.log(e.target.options.name)
+    marker.on("click", () => {
+        //clear any previously loaded data
         reviewList.innerHTML = "";
-        reviewModal.style.display = "block";
+
+        //check if marker location matches a stored restaurant location
+        let found = newRestaurants.find(function (obj) {
+            return obj.restaurantLocation == e.latlng;
+        });
+
+        //Build the restaurant review for the newly created restaurant
+        
+        reviewList.innerHTML = found.restaurantName;
+
         reviewModalContainer.style.display = "block";
         reviewModalContainer.style.opacity = "1";
-
-        //TODO: search newRestaurants array for matching coordinates
+        reviewModal.style.display = "block";
+        
     });
     
-
     modalContainer.style.display = "block";
     modalContainer.style.opacity = "1";
     modal.style.display = "block";
+
+});
+
+//Constructor function for new restaurant
+function NewRestaurant(restaurantName, userName, userReview, userRating, restaurantLocation) {
+    this.restaurantName = restaurantName;
+    this.userName = userName;
+    this.userReview = userReview;
+    this.userRating = userRating;
+    this.restaurantLocation = restaurantLocation;
+}
+
+//Create new restaurant object and add it to the newRestaurants array
+document.getElementById("add-restaurant").addEventListener("click", () => {
+    //e.preventDefault();
+
+    let newRestaurantUser = document.getElementById("users-name").value;
+    let userRestaurantName = document.getElementById("restaurants-name").value;
+    let newRestaurantUserReview = document.getElementById("users-review").value;
+    let newRestaurantUserRating = document.getElementById("restaurant-rating").value;
+    let newRestaurantLocation = newRestauratMarkers[newRestauratMarkers.length - 1];
+
+
+    let userRestaurant = new NewRestaurant(userRestaurantName, newRestaurantUser, newRestaurantUserReview, newRestaurantUserRating, newRestaurantLocation);
+
+    newRestaurants.push(userRestaurant);
+
+    modalContainer.style.display = "none";
+    modalContainer.style.opacity = "0";
+    modal.style.display = "none";
+
+    //reset form
+    document.getElementById("newRestaurantForm").reset();
 
 });
 
@@ -254,7 +269,7 @@ mymap.on("contextmenu", (e) => {
 
 const restaurantMarkers = (restaurantInfoList) => {
     mymap.removeLayer(me);
-    console.log(markers);
+
     //Check if a markers array has been created
     if (markers) {
         //loop through the markers array and remove each marker
@@ -397,6 +412,3 @@ reviewModalContainer.addEventListener("click", () => {
     reviewModalContainer.style.opacity = "0";
     reviewModal.style.display = "none";
 });
-
-
-

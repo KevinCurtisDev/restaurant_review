@@ -2,50 +2,56 @@
     "reviews":
     [
         {
-            "restaurantName": "Bronco",
-            "address": "39 Rue des Petites Écuries, 75010 Paris",
-            "lat": 48.8737815,
-            "long": 2.3501649,
+            "restaurantName": "Big Al's Feast",
+            "address": "39 You never want to return avenue, Blancharstown, Dublin 15",
+            "lat": 53.387935617819146,
+            "long": -6.406586481553043,
             "ratings": [
                 {
+                    "user": "Sum young guy",
                     "stars": 4,
-                    "comment": "Great! But not many veggie options."
+                    "comment": "My stomach felt like it was going to explode by the time I finished my meal!"
                 },
                 {
-                    "stars": 5,
-                    "comment": "My favorite restaurant!"
+                    "user": "Sum young guy's sister",
+                    "stars": 2,
+                    "comment": "Incredibly filling... and greasy :'("
                 }
             ]
         },
         {
-            "restaurantName": "Babalou",
-            "address": "4 Rue Lamarck, 75018 Paris",
-            "lat": 48.8865035,
-            "long": 2.3442197,
+            "restaurantName": "Burger Feast",
+            "address": "13 long walk drive, Blanchardstown, dublin 15",
+            "lat": 53.395920337195804,
+            "long": -6.375524664066171,
             "ratings": [
                 {
+                    "user": "Mr Burger eater",
                     "stars": 5,
-                    "comment": "Tiny pizzeria next to Sacre Coeur!"
+                    "comment": "Best burgers ever!!!"
                 },
                 {
-                    "stars": 3,
-                    "comment": "Meh, it was fine."
+                    "user": "Foodie123",
+                    "stars": 4,
+                    "comment": "Normally I don't like this type of food, but man oh man was it delicious."
                 }
             ]
         },
         {
-            "restaurantName": "Pizzaria",
-            "address": "26 Rue Lamarck, 97418 Paris",
-            "lat": 49.8865035,
-            "long": 2.3442197,
+            "restaurantName": "Pizza palace",
+            "address": "23 corduff road, blanchardstown, Dublin 15",
+            "lat": 53.41239688052852,
+            "long": -6.362482132966723,
             "ratings": [
                 {
-                    "stars": 5,
-                    "comment": "Amazing place to go eat pizza!"
+                    "user": "Little miss hungry",
+                    "stars": 0,
+                    "comment": "All of a sudden I'm not so hungry after seeing the roadkill they tried to serve me!"
                 },
                 {
-                    "stars": 3,
-                    "comment": "I hate pizza, why did I even eat here?!"
+                    "user": "ILikeFood21",
+                    "stars": 2,
+                    "comment": "I don't like food anymore!"
                 }
             ]
         }
