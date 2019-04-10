@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,50 +8,117 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
         integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
         crossorigin="" />
-    <link rel="stylesheet" href="assests/styles/styles.css">
+    <link rel="stylesheet" href="assets/styles/styles.css">
     <title>restaurant review</title>
 </head>
+
 <body>
     <header>
         <h1>Flaming Delicious Restaurant Reviews</h1>
     </header>
     <div class="modal-container" id="reviewModal-container"></div>
-        <div class="reviewModal" id="reviewModal">
-            <div class="modal__content">
-                <span class="close-modal" id="close-modal">&times;</span>
-                
-                <ul id="userReviews">
+    <div class="reviewModal" id="reviewModal">
+        <div class="modal__content">
+            <span class="close-modal" id="close-modal">&times;</span>
 
-                </ul>
-            </div>
+            <ul id="userReviews"></ul>
+
+            <input id="add-review" type="submit" class="button" value="ADD A REVIEW">
         </div>
     </div>
+
+    <div class="reviewModal" id="newRestaurantReviewModal">
+        <div class="modal__content">
+            <span class="close-modal" id="close-modal2">&times;</span>
+
+            <ul id="newUserReviews"></ul>
+
+            <input id="add-new-review" type="submit" class="button" value="ADD A REVIEW">
+        </div>
+    </div>
+
     <div class="modal-container" id="modal-container">
         <div class="modal" id="modal">
+
+            <!-- Add new restaurant form -->
             <form onsubmit="return validateForm()" id="newRestaurantForm">
-                <input type="text" placeholder="Your name" id="users-name" required>
                 <input type="text" placeholder="Restaurant name" id="restaurants-name" required>
-                <textarea id="users-review" placeholder="Your review"
-                    required></textarea><br>
-                <label for="restaurant-rating">Your rating</label>
-                <select id="restaurant-rating">
+                <input type="text" placeholder="Restaurant address" id="restaurants-address" required>
+                <label for="new-restaurant-rating">Restaurant Rating</label>
+                <select id="new-restaurant-rating">
+                    <option value="1">0</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
                     <option value="4">4</option>
                     <option value="5">5</option>
-                </select><br>
+                </select>
                 <input id="add-restaurant" type="submit" class="button" value="ADD">
             </form>
+            <!-- End Add new restaurant form -->
+
         </div>
     </div>
+
+
+    <div class="modal" id="modal-review">
+        <div class="modal__content">
+
+            <!-- Add restaurant review form -->
+            <form onsubmit="return validateForm()" id="add-review-form">
+                <input type="text" placeholder="Your name" id="new-restaurant-review-user">
+                <textarea type="text" placeholder="Your Review" id="new-restaurant-review-review"></textarea>
+                <label for="new-restaurant-review-rating">Select a Rating</label>
+                <select id="new-restaurant-review-rating">
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <input id="submit" type="submit" class="button" value="ADD">
+            </form>
+            <!-- End Add restaurant review form -->
+
+        </div>
+    </div>
+
+    <div class="modal" id="new-restaurant-modal-review">
+        <div class="modal__content">
+
+            <!-- Add new restaurant review form -->
+            <form onsubmit="return validateForm()" id="add-new-review-form">
+                <input type="text" placeholder="Your name" id="restaurant-review-user">
+                <textarea type="text" placeholder="Your Review" id="restaurant-review-review"></textarea>
+                <label for="new-restaurant-review-rating">Select a Rating</label>
+                <select id="restaurant-review-rating">
+                    <option value="1">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <input id="submit-review" type="submit" class="button" value="ADD">
+            </form>
+            <!-- End Add new restaurant review form -->
+
+        </div>
+    </div>
+
+    <!-- Search restaurants by location form -->
     <form onsubmit="return validateForm()" class="search-form" id="search-form">
         <input type="text" placeholder="Search location" id="search-field">
         <input id="search-btn" type="submit" class="button" value="SEARCH">
     </form>
+    <!-- End Search restaurants by location form -->
+
     <div class="container">
         <div class="map" id="leafletMap"></div>
         <div class="restaurant-list">
+
+            <!-- Filter restaurants form -->
             <form onsubmit="return validateForm()">
                 <label for="lowerRating">Minimum Rating</label>
                 <select id="lowerRating">
@@ -63,14 +131,18 @@
                 </select>
                 <input id="filter" type="submit" class="button" value="FILTER">
             </form>
+            <!-- End Filter restaurants form -->
+
+            <!-- Display list of restaurants to right of map -->
             <ul id="restaurant-list"></ul>
         </div>
     </div>
-    
+
     <!-- <script type="text/javascript" src="data.json"></script> -->
     <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
         integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
         crossorigin=""></script>
     <script src="js/app.js"></script>
 </body>
+
 </html>
