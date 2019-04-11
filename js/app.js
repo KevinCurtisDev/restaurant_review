@@ -131,7 +131,7 @@ getCurrentLocation();
 
 const getRestaurants = () => {
     //fetch geolocation based on hard coded json data
-    fetch("/data/data.json")
+    fetch("https://the-masta-blasta.github.io/restaurant_review/data/data.json")
         .then(function (response) { return response.json(); })
         .then(function (data) {
             console.log(data);
