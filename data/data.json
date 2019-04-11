@@ -1,11 +1,15 @@
 {
-    "reviews":
-    [
+    "reviews": [
         {
             "restaurantName": "Big Al's Feast",
             "address": "39 You never want to return avenue, Blancharstown, Dublin 15",
             "lat": 53.387935617819146,
             "long": -6.406586481553043,
+            "M": {
+                "lat": 53.387935617819146,
+                "lng": -6.406586481553043
+            },
+            "rating": 3,
             "ratings": [
                 {
                     "user": "Sum young guy",
@@ -24,6 +28,11 @@
             "address": "13 long walk drive, Blanchardstown, dublin 15",
             "lat": 53.395920337195804,
             "long": -6.375524664066171,
+            "M": {
+                "lat": 53.395920337195804,
+                "lng": -6.375524664066171
+            },
+            "rating": 4.5,
             "ratings": [
                 {
                     "user": "Mr Burger eater",
@@ -42,6 +51,11 @@
             "address": "23 corduff road, blanchardstown, Dublin 15",
             "lat": 53.41239688052852,
             "long": -6.362482132966723,
+            "M": {
+                "lat": 53.41239688052852,
+                "lng": -6.362482132966723
+            },
+            "rating": 1,
             "ratings": [
                 {
                     "user": "Little miss hungry",

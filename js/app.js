@@ -137,7 +137,6 @@ const getRestaurants = () => {
             console.log(data);
             restaurantList(data);
             buildMap();
-            buildList();
         });
 
 }
@@ -209,7 +208,6 @@ const buildMap = (latlng) => {
     userPositionIcon();
     //Get map boundaries
     mapBounds = mymap.getBounds();
-    //buildList();
 }
 
 
@@ -228,6 +226,7 @@ mymap.on("contextmenu", (e) => {
         .addTo(mymap);
 
     let coord = e.latlng;
+    markers.push(marker);
 
     //Create new restaurant object and add it to the newRestaurants array
     addRestaurant.addEventListener("click", (e) => {
@@ -263,10 +262,10 @@ mymap.on("contextmenu", (e) => {
             ]
         if (userRestaurant.restaurantName) {
             restaurantInfoList.push(newRestaurantDetails);
+            buildList(lower);
+            restaurantMarkers(restaurantInfoList);
         }
 
-        buildList();
-        //getRestaurants();
         modalControls.closeModal()
 
         //reset form
@@ -343,8 +342,6 @@ addReview.addEventListener("click", (e) => {
 
 const restaurantMarkers = (restaurantInfoList) => {
     console.log(restaurantInfoList)
-    //mymap.removeLayer(me);
-    console.log(markers)
     //Check if a markers array has been created
     if (markers) {
         //loop through the markers array and remove each marker
@@ -369,7 +366,6 @@ const restaurantMarkers = (restaurantInfoList) => {
 
         //populate markers array with updated markers
         markers.push(marker);
-        console.log(markers);
         marker.on("click", (e) => {
             reviewList.innerHTML = "";
             const restaurantName = document.createElement("h2");
@@ -436,7 +432,7 @@ const restaurantMarkers = (restaurantInfoList) => {
 ************************* Build restaurant info HTML list to right of map ***************************
 */
 
-const buildList = () => {
+const buildList = (lower) => {
     //clear previous list before building dom
     restaurantsList.innerHTML = "";
 
@@ -615,7 +611,7 @@ const getApiRestaurants = (latlng, latcoord, longcoord) => {
             }
             restaurantMarkers(restaurantInfoList);
             buildMap(latlng, latcoord, longcoord);
-            buildList();
+            buildList(lower);
         });
 }
 /**********************************************************************************************************/
@@ -693,9 +689,5 @@ filterList.addEventListener("click", (e) => {
     e.target.preventDefault;
     lower = document.getElementById("lowerRating").value;
 
-    buildList();
-    restaurantList();
+    buildList(lower);
 });
-
-
-//TODO: build function to get restaurants and get api restaurants then build map and list with filter
